@@ -1,7 +1,11 @@
 #include <iostream>
 #include <stdlib.h>
 #include <time.h>
+#include <algorithm>
 using namespace std;
+
+string yesOptions [5] = {"y", "yes", "yep", "okay", "ok"};
+string noOptions [9] = {"n", "no", "nope", "never", "escape", "quit", "esc", "leave", "exit"};
 
 void waitNSeconds(unsigned int numSeconds) {
   int startTime = clock();
@@ -21,7 +25,7 @@ bool playGame() {
 
   int computerNumber = (rand() % 10) + 1;
 
-  waitNSeconds(2);
+  waitNSeconds(1);
 
   cout << "Computer guesses: " << computerNumber << endl;
 
@@ -31,17 +35,24 @@ bool playGame() {
     cout << "FAILURE!" << endl;
   }
 
-  waitNSeconds(2);
+  waitNSeconds(1);
 
-  cout << "Play again?" << endl;
+  bool promptUserResponse = true;
 
-  string userResponse;
-  cin >> userResponse;
+  while(promptUserResponse) {
+    cout << "Play again?" << endl;
 
-  if(userResponse == "y") {
-    return true;
+    string userResponse;
+    cin >> userResponse;
+
+    transform(userResponse.begin(), userResponse.end(), userResponse.begin(), ::tolower);
+
+    if(find(begin(yesOptions), end(yesOptions), userResponse) != end(yesOptions)) {
+      return true;
+    } else if (find(begin(noOptions), end(noOptions), userResponse) != end(noOptions)) {
+      return false;
+    }
   }
-  return false;
 }
 
 int main() {
